@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_option.css') }}">
+</head>
+<body>
+    <div class="container">
+        <button class="section server" id="server">
+            <h2>Server</h2>
+            <p>Όρισε την συσκεύη σου σε Server</p>
+        </button>
+        <button class="section controller" id="controller">
+            <h2>Controller</h2>
+            <p>Όρισε την συσκευή σου σε Controller</p>
+        </button>
+
+    </div>
+    <script src="{{ url_for('static', filename='option.js') }}"></script>
+</body>
+</html>
