@@ -1,24 +1,26 @@
+import os
+import sys
 import socket
 import threading
-import keyboard
 import pyautogui
+import webbrowser
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-from datetime import datetime
 from flask_socketio import SocketIO, emit
-import time
-import os
 
-app = Flask(__name__)
-socketio = SocketIO(app)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
+socketio = SocketIO(app, async_mode="threading")
 app.secret_key = 'your_secret_key'
 PORT = 5000
 
-# Καθολικές μεταβλητές (Global flags)
+# --- Καθολικές μεταβλητές ---
 server_running = False
 server_thread = None
-server_socket = None   # Κρατάμε το socket για να το κλείσουμε
-
-
+server_socket = None
 global_client_socket = None
 global_target_ip = None
 
@@ -284,4 +286,10 @@ def handle_client_command(command_data):
         emit('command_ack', {'status': 'failed', 'command': command, 'message': 'Δεν έχει οριστεί IP προορισμού.'})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=False, port=8000)
+    try:
+        webbrowser.open("http://127.0.0.1:8000/")
+        socketio.run(app, port=8000, debug=True)
+    except Exception as e:
+        print("Σφάλμα:", e)
+    input("Πατήστε Enter για έξοδο...")
+    
