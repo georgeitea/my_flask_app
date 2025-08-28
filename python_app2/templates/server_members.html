@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Κατάσταση Client</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            margin-bottom: 1rem;
+        }
+        .status {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+        .connected { background: #d4edda; color: #155724; }
+        .disconnected { background: #f8d7da; color: #721c24; }
+        button {
+            padding: 0.8rem 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.125rem);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #dc3545;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            width: 100%;
+            max-width: 250px;
+        }
+        button:hover {
+            background: #b02a37;
+        }
+        @media (max-width: 500px) {
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>📡 Κατάσταση Server</h1>
+        <div id="status" class="status disconnected">
+            🚫 Κανένας client δεν έχει συνδεθεί
+        </div>
+        <button id="stopBtn">🛑 Σταμάτησε τον Server</button>
+    </div>
+
+   <script>
+        const socket = io();
+
+        socket.on('client_connected', function(data) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = "✅ Συνδέθηκε client: " + data.ip;
+            statusDiv.classList.remove("disconnected");
+            statusDiv.classList.add("connected");
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', function() {
+            fetch('/stop_server', {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    alert("Ο server σταμάτησε!");
+                    const statusDiv = document.getElementById('status');
+                    statusDiv.innerHTML = "🛑 Server σταματημένος";
+                    statusDiv.classList.remove("connected");
+                    statusDiv.classList.add("disconnected");
+                    window.location.href = '/server';
+            });
+    });
+</script>
+    
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='server.css') }}">
+    <style>
+        .btn.start {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .btn.start:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="typewriter" data-text="Server Control Panel"></span></h1>
+        <button class="btn start" id="server_btn">Start Server</button>
+    </div>
+
+    <script>
+        const span = document.querySelector('.typewriter');
+        const text = span.getAttribute('data-text');
+
+        function typeEffect() {
+            span.style.animation = 'none';
+            span.offsetHeight;
+            span.textContent = '';
+            span.style.animation = `typing 2s steps(${text.length}) forwards, blink 0.75s step-end infinite`;
+            span.textContent = text;
+        }
+
+        typeEffect();
+        setInterval(typeEffect, 5000);
+
+        document.getElementById('server_btn').addEventListener('click', function() {
+            fetch('/start_server', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === "started"){
+                        alert("✅ Server ξεκίνησε και περιμένει συνδέσεις!");
+                    } else {
+                        alert("ℹ️ Ο server τρέχει ήδη!");
+                    }
+                    window.location.href = '/server_members';
+                });
+        });
+    </script>
+</body>
+</html>
