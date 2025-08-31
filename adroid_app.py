@@ -46,7 +46,7 @@ class ConnectScreen(BoxLayout):
             multiline=False,
             font_size=50,
             size_hint_y=None,
-            height=100,
+            height=500,
             background_normal='',
             background_color=(0.95, 0.95, 0.95, 1),
             foreground_color=(0.1, 0.1, 0.1, 1),
@@ -168,4 +168,5 @@ class RemoteControlApp(App):
 if __name__ == "__main__":
 
     RemoteControlApp().run()
+
 
